@@ -50,6 +50,19 @@ const initLikesCounter = () => {
     }
 }
 
+const initReply = () => {
+    const comments = document.querySelectorAll('.comment-text');
+
+    for (const comment of comments) {
+
+        const input = document.getElementById('add-comment');
+        comment.addEventListener('click', () => {
+            input.value = ">" + comment.innerText;
+        }
+        )
+    }
+}
+
 const renderComments = () => {
     commentsHtml = users.map((user, index) => {
         return `<li class="comment">
@@ -58,7 +71,7 @@ const renderComments = () => {
           <div>${user.date}</div>
         </div>
         <div class="comment-body">
-          <div class="comment-text">
+          <div class="comment-text white-space: pre-line" id="comment-text">
             ${user.comment}
           </div>
         </div>
@@ -74,6 +87,7 @@ const renderComments = () => {
     listComment.innerHTML = commentsHtml;
 
     initLikesCounter();
+    initReply();
 
 }
 
@@ -104,13 +118,12 @@ buttonComment.addEventListener('click', () => {
     }
 
     users.push({
-        name: nameComment.value,
-        comment: textComment.value,
+        name: nameComment.value.replaceAll("<", "&lt;").replaceAll(">", "&gt"),
+        comment: textComment.value.replaceAll("<", "&lt;").replaceAll(">", "&gt"),
         date: formattedDate,
         likes: 0,
         click: false,
     })
-
 
     renderComments();
 }
